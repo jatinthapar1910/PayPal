@@ -28,7 +28,7 @@ class Provider extends AbstractProvider
     protected function getAuthUrl($state)
     {
         return $this->buildAuthUrlFromBase(
-            'https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize',
+            'https://www.' . (env('PAYPAL_SANBOX') == true ? 'sandbox.' : '') . 'paypal.com/webapps/auth/protocol/openidconnect/v1/authorize',
             $state
         );
     }
@@ -38,7 +38,7 @@ class Provider extends AbstractProvider
      */
     protected function getTokenUrl()
     {
-        return 'https://api.paypal.com/v1/identity/openidconnect/tokenservice';
+        return 'https://api.' . (env('PAYPAL_SANBOX') == true ? 'sandbox.' : '') . 'paypal.com/v1/identity/openidconnect/tokenservice';
     }
 
     /**
@@ -47,7 +47,7 @@ class Provider extends AbstractProvider
     protected function getUserByToken($token)
     {
         $response = $this->getHttpClient()->get(
-            'https://api.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid',
+            'https://api.' . (env('PAYPAL_SANBOX') == true ? 'sandbox.' : '') . 'paypal.com/v1/identity/openidconnect/userinfo/?schema=openid',
             [
                 'headers' => [
                     'Authorization' => 'Bearer '.$token,
